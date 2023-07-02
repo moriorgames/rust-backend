@@ -1,6 +1,18 @@
 # Rust Backend
 
+
 ```
-$ cargo build
-$ ./target/debug/hello_cargo  
+# Run the project
+$ cargo run
+# Test the project
+$ cargo test
+```
+
+# Code coverage
+
+To be able to execute the code coverage you can use this tool
+
+```
+$ cargo install cargo-tarpaulin
+$ cargo tarpaulin --output-dir target/debug/tarpaulin/ --out html
 ```
