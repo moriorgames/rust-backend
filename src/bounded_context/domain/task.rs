@@ -51,7 +51,7 @@ mod tests {
         let expected_status_before = TaskStatus::Todo;
         let expected_status_after = TaskStatus::InProgress;
 
-        let mut sut = Task::new(id, title.clone(), description.clone());
+        let mut sut = Task::new(id, title, description);
 
         assert_eq!(sut.status, expected_status_before);
 
@@ -68,7 +68,7 @@ mod tests {
         let expected_status_before = TaskStatus::Todo;
         let expected_status_after = TaskStatus::Done;
 
-        let mut sut = Task::new(id, title.clone(), description.clone());
+        let mut sut = Task::new(id, title, description);
 
         assert_eq!(sut.status, expected_status_before);
 
