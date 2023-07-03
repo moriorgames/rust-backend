@@ -30,28 +30,28 @@ impl Task {
 mod tests {
     use super::*;
 
+    const DEF_ID: u32 = 1;
+    const DEF_TITLE: &str = "Sample Task";
+    const DEF_DESCRIPTION: &str = "This is a sample task";
+
+    fn create_task_with_defaults() -> Task {
+        Task::new(DEF_ID, DEF_TITLE.to_string(), DEF_DESCRIPTION.to_string())
+    }
+
     #[test]
     fn test_task_constructor() {
-        let id = 1;
-        let title = "Sample Task".to_string();
-        let description = "This is a sample task".to_string();
+        let sut = create_task_with_defaults();
 
-        let sut = Task::new(id, title.clone(), description.clone());
-
-        assert_eq!(sut.id, id);
-        assert_eq!(sut.title, title);
-        assert_eq!(sut.description, description);
+        assert_eq!(sut.id, DEF_ID);
+        assert_eq!(sut.title, DEF_TITLE.to_string());
+        assert_eq!(sut.description, DEF_DESCRIPTION.to_string());
     }
 
     #[test]
     fn test_start_task_changes_status_to_in_progress() {
-        let id = 1;
-        let title = "Sample Task".to_string();
-        let description = "This is a sample task".to_string();
+        let mut sut = create_task_with_defaults();
         let expected_status_before = TaskStatus::Todo;
         let expected_status_after = TaskStatus::InProgress;
-
-        let mut sut = Task::new(id, title, description);
 
         assert_eq!(sut.status, expected_status_before);
 
@@ -61,14 +61,10 @@ mod tests {
     }
 
     #[test]
-    fn test_finisht_task_changes_status_to_done() {
-        let id = 1;
-        let title = "Sample Task".to_string();
-        let description = "This is a sample task".to_string();
+    fn test_finish_task_changes_status_to_done() {
+        let mut sut = create_task_with_defaults();
         let expected_status_before = TaskStatus::Todo;
         let expected_status_after = TaskStatus::Done;
-
-        let mut sut = Task::new(id, title, description);
 
         assert_eq!(sut.status, expected_status_before);
 
