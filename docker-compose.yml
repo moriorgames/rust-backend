@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: rust
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: dev
+      MYSQL_TCP_PORT: 3306
+    container_name: db
+    ports:
+    - 3306:3306
+    expose:
+      - 3306
