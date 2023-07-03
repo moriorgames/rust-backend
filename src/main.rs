@@ -2,7 +2,7 @@ mod bounded_context;
 
 fn main() {
 
-    let mut task_repository = bounded_context::domain::task_repository::InMemoryTaskRepository::new();
+    let mut task_repository = bounded_context::infrastructure::in_memory_task_repository::InMemoryTaskRepository::new();
     let mut create_task = bounded_context::application::create_task::CreateTask::new(&mut task_repository);
 
     let title = "Sample Task".to_string();
