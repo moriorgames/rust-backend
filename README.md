@@ -17,3 +17,11 @@ $ cargo install cargo-tarpaulin
 $ cargo tarpaulin --output-dir target/debug/tarpaulin/ --out html
 $ open -a "Google Chrome" ./target/debug/tarpaulin/tarpaulin-report.html
 ```
+
+# Tools
+
+Print cat files to explore them together
+
+```
+$ find . -type f -exec printf '### START OF FILE ###\n%s\n' {} \; -exec cat {} \; -exec printf '### END OF FILE ###\n' \;
+```
