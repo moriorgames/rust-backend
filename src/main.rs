@@ -1,12 +1,14 @@
 mod bounded_context;
 
-fn main() {    
-    
-    let id = 1;
+fn main() {
+
+    let mut task_repository = bounded_context::domain::task_repository::InMemoryTaskRepository::new();
+    let mut create_task = bounded_context::application::create_task::CreateTask::new(&mut task_repository);
+
     let title = "Sample Task".to_string();
     let description = "This is a sample task".to_string();
-    let task = bounded_context::domain::task::Task::new(id, title, description);
+    let id = create_task.execute(title, description);
 
     println!("Hello world!");
-    println!("{:?}", task.title);
+    println!("{:?}", id);
 }
