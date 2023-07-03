@@ -17,3 +17,7 @@ Cargo.lock
 
 # System files specific
 .DS_Store
+
+
+# IDE files
+.vscode
