@@ -51,7 +51,7 @@ mod tests {
         fn save(&mut self, task: Task) {
             self.saved_task.borrow_mut().replace(task);
         }
-        fn get_by_id(&mut self, id: Uuid) -> Result<Task, Box<dyn std::error::Error>> {
+        fn get_by_id(&mut self, _id: Uuid) -> Result<Task, Box<dyn std::error::Error>> {
             let id = uuid!("00000000-0000-0000-0000-000000000001");
             let title = "Sample Task".to_string();
             let description = "This is a sample task".to_string();

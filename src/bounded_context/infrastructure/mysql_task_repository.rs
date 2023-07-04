@@ -1,32 +1,13 @@
 use crate::bounded_context::domain::{
-    task::Task, task_repository::TaskRepository, task_status::TaskStatus,
+    task::Task, task_repository::TaskRepository
 };
+use crate::bounded_context::infrastructure::mysql_task_mapper::{
+    TaskRow, MysqlTaskMapper
+};
+use crate::bounded_context::infrastructure::repository_error::RepositoryError;
 use mysql::prelude::*;
 use mysql::*;
-use std::error::Error;
-use std::fmt;
 use uuid::Uuid;
-
-#[derive(Debug, PartialEq, Eq)]
-struct TaskRow {
-    id: String,
-    title: String,
-    description: String,
-    status: String,
-}
-
-#[derive(Debug)]
-struct NotFoundError {
-    message: String,
-}
-
-impl fmt::Display for NotFoundError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.message)
-    }
-}
-
-impl Error for NotFoundError {}
 
 pub struct MySQLTaskRepository {
     conn: mysql::PooledConn,
@@ -62,30 +43,21 @@ impl TaskRepository for MySQLTaskRepository {
         let id_value = id.to_string();
         let modified_query = query.replace("?", &format!("'{}'", id_value));
 
-        let selected_tasks =
-            self.conn
-                .query_map(modified_query, |(id, title, description, status)| TaskRow {
-                    id,
-                    title,
-                    description,
-                    status,
-                })?;
-        for item in &selected_tasks {
-            let status = TaskStatus::from_string(&item.status);
-            let task = Task::from_persistence(
-                Uuid::parse_str(&item.id)?,
-                item.title.clone(),
-                item.description.clone(),
-                status,
-            );
-            println!("{:?}", item);
+        let selected_rows = self.conn.query_map(modified_query, |(id, title, description, status)| TaskRow {
+            id,
+            title,
+            description,
+            status,
+        })?;
 
+        let task_mapper = MysqlTaskMapper {};
+
+        if let Some(row) = selected_rows.into_iter().next() {
+            let task = task_mapper.map_to_task(row)?;
             return Ok(task);
         }
 
-        let error = NotFoundError {
-            message: "Entity Not Found".to_string(),
-        };
+        let error = RepositoryError::new("Entity Not Found");
 
         Err(Box::new(error))
     }
