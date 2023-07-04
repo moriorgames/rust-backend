@@ -1,9 +1,32 @@
-use crate::bounded_context::domain::{task::Task, task_status::TaskStatus, task_repository::TaskRepository};
-use mysql::params;
+use crate::bounded_context::domain::{
+    task::Task, task_repository::TaskRepository, task_status::TaskStatus,
+};
 use mysql::prelude::*;
-use mysql::Value;
-use mysql::Row;
-use uuid::{uuid, Uuid};
+use mysql::*;
+use std::error::Error;
+use std::fmt;
+use uuid::Uuid;
+
+#[derive(Debug, PartialEq, Eq)]
+struct TaskRow {
+    id: String,
+    title: String,
+    description: String,
+    status: String,
+}
+
+#[derive(Debug)]
+struct NotFoundError {
+    message: String,
+}
+
+impl fmt::Display for NotFoundError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.message)
+    }
+}
+
+impl Error for NotFoundError {}
 
 pub struct MySQLTaskRepository {
     conn: mysql::PooledConn,
@@ -34,48 +57,61 @@ impl TaskRepository for MySQLTaskRepository {
             .expect("Failed to execute query");
     }
 
-    fn get_by_id(&self, id: Uuid) -> Result<Task, String> {
+    fn get_by_id(&mut self, id: Uuid) -> Result<Task, Box<dyn std::error::Error>> {
+        let query = "SELECT * FROM task WHERE id = ?";
+        let id_value = id.to_string();
+        let modified_query = query.replace("?", &format!("'{}'", id_value));
 
-        let id= uuid!("00000000-0000-0000-0000-000000000001");
-        let title = "Sample Task".to_string();
-        let description = "This is a sample task".to_string();
-        let task = Task::new(id, title, description);
-        
-        return Ok(task);
+        let selected_tasks =
+            self.conn
+                .query_map(modified_query, |(id, title, description, status)| TaskRow {
+                    id,
+                    title,
+                    description,
+                    status,
+                })?;
+        for item in &selected_tasks {
+            let status = TaskStatus::from_string(&item.status);
+            let task = Task::from_persistence(
+                Uuid::parse_str(&item.id)?,
+                item.title.clone(),
+                item.description.clone(),
+                status,
+            );
+            println!("{:?}", item);
 
-        // let query = "SELECT id, title, description, status FROM task WHERE id = :id";
-        
-        // let params = params! {
-        //     "id" => id.hyphenated().to_string(),
-        // };
+            return Ok(task);
+        }
 
-        // let result = self.conn.exec_first::<Value, _, _>(query, params).map_err(|err| err.to_string())?;
+        let error = NotFoundError {
+            message: "Entity Not Found".to_string(),
+        };
 
-        // if let Some(row) = result {
+        Err(Box::new(error))
+    }
+}
 
-        //     let id_value = row.as_sql(true);
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::bounded_context::domain::task_status::TaskStatus;
+    use uuid::Uuid;
 
-        //     let id_value = row
-        //     .get::<&str, Value>("id")
-        //     .and_then(|value| value.as_str().ok_or("Invalid ID"))?;
+    #[test]
+    fn test_save() {
+        let url = "mysql://root:root@localhost:3306/rust";
+        let mut repository = MySQLTaskRepository::new(url).unwrap();
 
-        //     let title = row.get::<Value, &str>("title").map_err(|_| "Invalid title")?;
-        //     let description = row.get::<Value, &str>("description").map_err(|_| "Invalid description")?;
-        //     let status = row.get::<Value, &str>("status").map_err(|_| "Invalid status")?;
+        let id = Uuid::new_v4();
+        let title = "Test Task".to_string();
+        let description = "This is a test task".to_string();
+        let status = TaskStatus::Todo;
+        let task = Task::from_persistence(id, title.clone(), description.clone(), status);
 
-        //     let task_id = Uuid::parse_str(id_value).map_err(|_| "Invalid UUID")?;
-        //     let task_status = TaskStatus::from_str(status).map_err(|_| "Invalid status")?;
+        repository.save(task.clone());
 
-        //     let task = Task::from_persistence(task_id, title.to_string(), description.to_string(), task_status);
+        let retrieved_task = repository.get_by_id(id).unwrap();
 
-
-        //     let id= uuid!("00000000-0000-0000-0000-000000000001");
-        //     let title = "Sample Task".to_string();
-        //     let description = "This is a sample task".to_string();
-        //     let task = Task::new(id, title, description);
-        //     Ok(task)
-        // } else {
-        //     Err("Task not found".to_string())
-        // }
+        assert_eq!(retrieved_task.id, id);
     }
 }

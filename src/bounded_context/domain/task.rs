@@ -1,6 +1,7 @@
 use super::task_status::TaskStatus;
 use uuid::Uuid;
 
+#[derive(Clone)]
 pub struct Task {
     pub id: Uuid,
     pub title: String,

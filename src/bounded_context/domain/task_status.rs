@@ -1,6 +1,6 @@
 use std::fmt;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum TaskStatus {
     Todo,
     InProgress,
@@ -13,6 +13,17 @@ impl fmt::Display for TaskStatus {
             TaskStatus::Todo => write!(f, "Todo"),
             TaskStatus::InProgress => write!(f, "InProgress"),
             TaskStatus::Done => write!(f, "Done"),
+        }
+    }
+}
+
+impl TaskStatus {
+    pub fn from_string(value: &str) -> TaskStatus {
+        match value {
+            "Todo" => TaskStatus::Todo,
+            "InProgress" => TaskStatus::InProgress,
+            "Done" => TaskStatus::Done,
+            &_ => todo!(),
         }
     }
 }
