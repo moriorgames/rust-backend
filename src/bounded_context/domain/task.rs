@@ -18,6 +18,20 @@ impl Task {
         }
     }
 
+    pub fn from_persistence(
+        id: Uuid,
+        title: String,
+        description: String,
+        status: TaskStatus,
+    ) -> Task {
+        Task {
+            id,
+            title,
+            description,
+            status,
+        }
+    }
+
     pub fn start_task(&mut self) {
         self.status = TaskStatus::InProgress;
     }
@@ -35,6 +49,7 @@ mod tests {
     const DEF_ID: Uuid = uuid!("00000000-0000-0000-0000-000000000001");
     const DEF_TITLE: &str = "Sample Task";
     const DEF_DESCRIPTION: &str = "This is a sample task";
+    const DEF_STATUS: TaskStatus = TaskStatus::InProgress;
 
     fn create_task_with_defaults() -> Task {
         Task::new(DEF_ID, DEF_TITLE.to_string(), DEF_DESCRIPTION.to_string())
@@ -47,6 +62,21 @@ mod tests {
         assert_eq!(sut.id, DEF_ID);
         assert_eq!(sut.title, DEF_TITLE.to_string());
         assert_eq!(sut.description, DEF_DESCRIPTION.to_string());
+    }
+
+    #[test]
+    fn test_task_from_persistence() {
+        let sut = Task::from_persistence(
+            DEF_ID,
+            DEF_TITLE.to_string(),
+            DEF_DESCRIPTION.to_string(),
+            DEF_STATUS,
+        );
+
+        assert_eq!(sut.id, DEF_ID);
+        assert_eq!(sut.title, DEF_TITLE.to_string());
+        assert_eq!(sut.description, DEF_DESCRIPTION.to_string());
+        assert_eq!(sut.status, DEF_STATUS);
     }
 
     #[test]
