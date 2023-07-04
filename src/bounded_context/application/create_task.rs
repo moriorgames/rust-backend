@@ -1,5 +1,6 @@
 
 use crate::bounded_context::domain::{task::Task, task_repository::TaskRepository};
+use uuid::Uuid;
 
 pub struct CreateTask<'a> {
     task_repository: &'a mut dyn TaskRepository,
@@ -10,12 +11,12 @@ impl<'a> CreateTask<'a> {
         CreateTask { task_repository }
     }
 
-    pub fn execute(&mut self, title: String, description: String) -> u32 {
-        let id = 234;
+    pub fn execute(&mut self, title: String, description: String) -> String {
+        let id = Uuid::new_v4();
         let task = Task::new(id, title, description);
         self.task_repository.save(task);
 
-        return id;
+        id.to_string()
     }
 }
 

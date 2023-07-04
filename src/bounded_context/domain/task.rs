@@ -1,14 +1,15 @@
 use super::task_status::TaskStatus;
+use uuid::{uuid, Uuid};
 
 pub struct Task {
-    pub id: u32,
+    pub id: Uuid,
     pub title: String,
     pub description: String,
     pub status: TaskStatus,
 }
 
 impl Task {
-    pub fn new(id: u32, title: String, description: String) -> Task {
+    pub fn new(id: Uuid, title: String, description: String) -> Task {
         Task {
             id,
             title,
@@ -30,7 +31,7 @@ impl Task {
 mod tests {
     use super::*;
 
-    const DEF_ID: u32 = 1;
+    const DEF_ID: Uuid = uuid!("00000000-0000-0000-0000-000000000001");
     const DEF_TITLE: &str = "Sample Task";
     const DEF_DESCRIPTION: &str = "This is a sample task";
 

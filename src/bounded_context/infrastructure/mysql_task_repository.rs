@@ -1,6 +1,6 @@
 use crate::bounded_context::domain::{task::Task, task_repository::TaskRepository};
 use mysql::prelude::*;
-use  mysql::params;
+use mysql::params;
 
 pub struct MySQLTaskRepository {
     conn: mysql::PooledConn,
@@ -16,9 +16,10 @@ impl MySQLTaskRepository {
 
 impl TaskRepository for MySQLTaskRepository {
     fn save(&mut self, task: Task) {
-        let query = "INSERT INTO task (title, description, status) VALUES (:title, :description, :status)";
+        let query = "INSERT INTO task (id, title, description, status) VALUES (:id, :title, :description, :status)";
 
         let params = mysql::params! {
+            "id" => task.id.hyphenated().to_string(),
             "title" => task.title,
             "description" => task.description,
             "status" => task.status.to_string(),
