@@ -1,5 +1,6 @@
 mod bounded_context;
 use bounded_context::infrastructure::mysql_task_repository::MySQLTaskRepository;
+use bounded_context::application::create_task::CreateTaskInput;
 use std::error::Error;
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -10,10 +11,11 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let title = "Sample Task".to_string();
     let description = "This is a sample task".to_string();
-    let id = create_task.execute(title, description);
+    let input = CreateTaskInput { title, description };
+    let output = create_task.execute(input);
 
     println!("Hello world!");
-    println!("{:?}", id);
+    println!("{:?}", output.id);
 
     Ok(())
 }

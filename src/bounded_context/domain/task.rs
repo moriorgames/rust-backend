@@ -1,5 +1,5 @@
 use super::task_status::TaskStatus;
-use uuid::{uuid, Uuid};
+use uuid::Uuid;
 
 pub struct Task {
     pub id: Uuid,
@@ -30,6 +30,7 @@ impl Task {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use uuid::{uuid, Uuid};
 
     const DEF_ID: Uuid = uuid!("00000000-0000-0000-0000-000000000001");
     const DEF_TITLE: &str = "Sample Task";
