@@ -1,6 +1,6 @@
 use crate::bounded_context::domain::{task::Task, task_repository::TaskRepository};
-use mysql::prelude::*;
 use mysql::params;
+use mysql::prelude::*;
 
 pub struct MySQLTaskRepository {
     conn: mysql::PooledConn,
@@ -25,6 +25,9 @@ impl TaskRepository for MySQLTaskRepository {
             "status" => task.status.to_string(),
         };
 
-        let _ = self.conn.exec_drop(query, params).expect("Failed to execute query");
+        let _ = self
+            .conn
+            .exec_drop(query, params)
+            .expect("Failed to execute query");
     }
 }

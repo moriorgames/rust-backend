@@ -26,7 +26,11 @@ impl<'a> CreateTask<'a> {
         let task = Task::new(id, input.title.clone(), input.description.clone());
         self.task_repository.save(task);
 
-        CreateTaskOutput { id: id.to_string() , title: input.title.clone(), description: input.description.clone() }
+        CreateTaskOutput {
+            id: id.to_string(),
+            title: input.title.clone(),
+            description: input.description.clone(),
+        }
     }
 }
 
@@ -55,7 +59,10 @@ mod tests {
         };
         let mut sut = CreateTask::new(&mut mock_repository);
 
-        let input = CreateTaskInput { title: DEF_TITLE.to_string(), description: DEF_DESCRIPTION.to_string() };
+        let input = CreateTaskInput {
+            title: DEF_TITLE.to_string(),
+            description: DEF_DESCRIPTION.to_string(),
+        };
         let output = sut.execute(input);
 
         let saved_task = mock_repository.saved_task.borrow();
