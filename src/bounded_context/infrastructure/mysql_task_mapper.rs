@@ -1,14 +1,23 @@
-use crate::bounded_context::domain::{
-    task::Task, task_status::TaskStatus,
-};
+use crate::bounded_context::domain::{task::Task, task_status::TaskStatus};
 use uuid::Uuid;
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug)]
 pub struct TaskRow {
-    pub id: String,
-    pub title: String,
-    pub description: String,
-    pub status: String,
+    id: String,
+    title: String,
+    description: String,
+    status: String,
+}
+
+impl TaskRow {
+    pub fn new(id: String, title: String, description: String, status: String) -> Self {
+        Self {
+            id,
+            title,
+            description,
+            status,
+        }
+    }
 }
 
 pub struct MysqlTaskMapper {}

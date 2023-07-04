@@ -1,9 +1,5 @@
-use crate::bounded_context::domain::{
-    task::Task, task_repository::TaskRepository
-};
-use crate::bounded_context::infrastructure::mysql_task_mapper::{
-    TaskRow, MysqlTaskMapper
-};
+use crate::bounded_context::domain::{task::Task, task_repository::TaskRepository};
+use crate::bounded_context::infrastructure::mysql_task_mapper::{MysqlTaskMapper, TaskRow};
 use crate::bounded_context::infrastructure::repository_error::RepositoryError;
 use mysql::prelude::*;
 use mysql::*;
@@ -43,12 +39,11 @@ impl TaskRepository for MySQLTaskRepository {
         let id_value = id.to_string();
         let modified_query = query.replace("?", &format!("'{}'", id_value));
 
-        let selected_rows = self.conn.query_map(modified_query, |(id, title, description, status)| TaskRow {
-            id,
-            title,
-            description,
-            status,
-        })?;
+        let selected_rows = self
+            .conn
+            .query_map(modified_query, |(id, title, description, status)| {
+                TaskRow::new(id, title, description, status)
+            })?;
 
         let task_mapper = MysqlTaskMapper {};
 
@@ -70,9 +65,9 @@ mod tests {
     use uuid::Uuid;
 
     #[test]
-    fn test_save() {
+    fn test_save_and_retrieve_data() {
         let url = "mysql://root:root@localhost:3306/rust";
-        let mut repository = MySQLTaskRepository::new(url).unwrap();
+        let mut sut = MySQLTaskRepository::new(url).unwrap();
 
         let id = Uuid::new_v4();
         let title = "Test Task".to_string();
@@ -80,9 +75,9 @@ mod tests {
         let status = TaskStatus::Todo;
         let task = Task::from_persistence(id, title.clone(), description.clone(), status);
 
-        repository.save(task.clone());
+        sut.save(task.clone());
 
-        let retrieved_task = repository.get_by_id(id).unwrap();
+        let retrieved_task = sut.get_by_id(id).unwrap();
 
         assert_eq!(retrieved_task.id, id);
     }
