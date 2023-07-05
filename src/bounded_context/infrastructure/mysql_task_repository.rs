@@ -19,6 +19,7 @@ impl MySQLTaskRepository {
 
 impl TaskRepository for MySQLTaskRepository {
     fn save(&mut self, task: Task) {
+        // @TODO this implementacion can be improved with other strategies or an ORM
         let query = "REPLACE INTO task (id, title, description, status) VALUES (:id, :title, :description, :status)";
 
         let params = mysql::params! {
