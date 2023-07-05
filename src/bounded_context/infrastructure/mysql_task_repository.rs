@@ -19,7 +19,7 @@ impl MySQLTaskRepository {
 
 impl TaskRepository for MySQLTaskRepository {
     fn save(&mut self, task: Task) {
-        let query = "INSERT INTO task (id, title, description, status) VALUES (:id, :title, :description, :status)";
+        let query = "REPLACE INTO task (id, title, description, status) VALUES (:id, :title, :description, :status)";
 
         let params = mysql::params! {
             "id" => task.id.hyphenated().to_string(),
