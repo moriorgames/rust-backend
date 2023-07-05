@@ -1,5 +1,6 @@
 mod bounded_context;
 use std::error::Error;
+use std::{thread, time};
 
 fn main() -> Result<(), Box<dyn Error>> {
     let mut task_repository =
@@ -19,6 +20,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("");
     println!("Created task with ID:  {:?}", output.id);
     println!("");
+    let millis = time::Duration::from_millis(5000);
+    let now = time::Instant::now();
+    thread::sleep(millis);
+    assert!(now.elapsed() >= millis);
+    println!("Elasped: {:?}", millis);
 
     let mut start_task =
         bounded_context::application::start_task::StartTask::new(&mut task_repository);
@@ -28,8 +34,25 @@ fn main() -> Result<(), Box<dyn Error>> {
     let output = start_task.execute(input);
 
     println!("");
-    println!("Started task with ID:  {:?}", output.id);
+    println!("Started task with ID: {:?} and finished with status {:?}", output.id, output.status);
     println!("");
+    let millis = time::Duration::from_millis(5000);
+    let now = time::Instant::now();
+    thread::sleep(millis);
+    assert!(now.elapsed() >= millis);
+    println!("Elasped: {:?}", millis);
+
+    let mut finish_task =
+        bounded_context::application::finish_task::FinishTask::new(&mut task_repository);
+
+    let id = output.id;
+    let input = bounded_context::application::finish_task::FinishTaskInput { id };
+    let output = finish_task.execute(input);
+
+    println!("");
+    println!("Started task with ID: {:?} and finished with status {:?}", output.id, output.status);
+    println!("");
+
 
     Ok(())
 }
