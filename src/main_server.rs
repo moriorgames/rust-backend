@@ -1,13 +1,10 @@
-use actix_web::{get, App, HttpResponse, HttpServer, Responder};
-
-#[get("/hello")]
-async fn hello() -> impl Responder {
-    println!("Hello, World!");
-    HttpResponse::Ok().body("Hello, World!")
-}
+mod bounded_context;
+use actix_web::{App, HttpServer};
+use bounded_context::infrastructure::http::hello_world_controller::hello;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    let hello = bounded_context::infrastructure::http::hello_world_controller::hello;
     HttpServer::new(|| {
         App::new().service(hello)
     })
