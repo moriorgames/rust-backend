@@ -2,7 +2,8 @@
 
 ```
 # Run the project
-$ cargo run
+$ cargo run --bin process
+$ cargo run --bin server
 # Test the project
 $ cargo test
 ```

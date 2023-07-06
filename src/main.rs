@@ -4,7 +4,7 @@ use std::{thread, time};
 
 fn main() -> Result<(), Box<dyn Error>> {
     let mut task_repository =
-        bounded_context::infrastructure::mysql_task_repository::MySQLTaskRepository::new(
+        bounded_context::infrastructure::mysql::mysql_task_repository::MySQLTaskRepository::new(
             "mysql://root:root@localhost:3306/rust",
         )
         .expect("Failed to create MySQLTaskRepository");
@@ -20,7 +20,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("");
     println!("Created task with ID:  {:?}", output.id);
     println!("");
-    let millis = time::Duration::from_millis(5000);
+    let millis = time::Duration::from_millis(3000);
     let now = time::Instant::now();
     thread::sleep(millis);
     assert!(now.elapsed() >= millis);
@@ -36,7 +36,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("");
     println!("Started task with ID: {:?} and finished with status {:?}", output.id, output.status);
     println!("");
-    let millis = time::Duration::from_millis(5000);
+    let millis = time::Duration::from_millis(3000);
     let now = time::Instant::now();
     thread::sleep(millis);
     assert!(now.elapsed() >= millis);

@@ -1,6 +1,6 @@
 use crate::bounded_context::domain::{task::Task, task_repository::TaskRepository};
-use crate::bounded_context::infrastructure::mysql_task_mapper::{MysqlTaskMapper, TaskRow};
-use crate::bounded_context::infrastructure::repository_error::RepositoryError;
+use crate::bounded_context::infrastructure::mysql::mysql_task_mapper::{MysqlTaskMapper, TaskRow};
+use crate::bounded_context::infrastructure::mysql::repository_error::RepositoryError;
 use mysql::prelude::*;
 use mysql::*;
 use uuid::Uuid;
