@@ -35,3 +35,12 @@ Print cat files to explore them together
 ```
 $ find . -type f -exec printf '### START OF FILE ###\n%s\n' {} \; -exec cat {} \; -exec printf '### END OF FILE ###\n' \;
 ```
+
+# Sample Request/Response
+
+```
+# Request
+$ curl -X POST -H "Content-Type: application/json" -d '{"title": "Amazing task","description": "Description of an amazing task todo"}' http://localhost:8080/api/tasks
+# Response
+{"id":"26ce4b34-b493-4ffc-a247-333c399371da","title":"Amazing task","description":"Description of an amazing task todo","status":"Fake status"}%
+```
