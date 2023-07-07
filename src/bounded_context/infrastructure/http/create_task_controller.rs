@@ -1,6 +1,6 @@
 use actix_web::{post, web, HttpResponse, Responder};
 use serde::{Deserialize, Serialize};
-use crate::bounded_context::application::create_task::{CreateTask, CreateTaskInput, CreateTaskOutput};
+use crate::bounded_context::application::create_task::{CreateTask, CreateTaskInput};
 use crate::bounded_context::infrastructure::mysql::mysql_task_repository::MySQLTaskRepository;
 
 #[derive(Debug, Deserialize)]
@@ -40,11 +40,4 @@ async fn create_task(request: web::Json<CreateTaskRequest>) -> impl Responder {
     };
 
     HttpResponse::Ok().json(response)
-}
-
-pub fn configure_routes(cfg: &mut web::ServiceConfig) {
-    cfg.service(
-        web::scope("/api")
-            .service(create_task),
-    );
 }
