@@ -2,6 +2,7 @@ use actix_web::{post, web, HttpResponse, Responder};
 use serde::{Deserialize, Serialize};
 use crate::bounded_context::application::create_task::{CreateTask, CreateTaskInput};
 use crate::bounded_context::infrastructure::mysql::mysql_task_repository::MySQLTaskRepository;
+use crate::bounded_context::infrastructure::config::app_config;
 
 #[derive(Debug, Deserialize)]
 pub struct CreateTaskRequest {
@@ -19,8 +20,9 @@ pub struct CreateTaskResponse {
 
 #[post("/tasks")]
 async fn create_task(request: web::Json<CreateTaskRequest>) -> impl Responder {
+    let config = app_config::load_config();
 
-    let mut task_repository = MySQLTaskRepository::new("mysql://root:root@localhost:3306/rust",)
+    let mut task_repository = MySQLTaskRepository::new(&config.db_url,)
                 .expect("Failed to create MySQLTaskRepository");
 
     let mut create_task = CreateTask::new(&mut task_repository);

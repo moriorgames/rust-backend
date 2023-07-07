@@ -1,11 +1,15 @@
 mod bounded_context;
+use bounded_context::infrastructure::config::app_config;
 use std::error::Error;
 use std::{thread, time};
 
 fn main() -> Result<(), Box<dyn Error>> {
+
+    let config = app_config::load_config();
+
     let mut task_repository =
         bounded_context::infrastructure::mysql::mysql_task_repository::MySQLTaskRepository::new(
-            "mysql://root:root@localhost:3306/rust",
+            &config.db_url,
         )
         .expect("Failed to create MySQLTaskRepository");
 

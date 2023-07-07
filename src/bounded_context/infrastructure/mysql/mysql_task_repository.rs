@@ -63,12 +63,13 @@ impl TaskRepository for MySQLTaskRepository {
 mod tests {
     use super::*;
     use crate::bounded_context::domain::task_status::TaskStatus;
+    use crate::bounded_context::infrastructure::config::app_config;
     use uuid::Uuid;
 
     #[test]
     fn test_save_and_retrieve_data() {
-        let url = "mysql://root:root@localhost:3306/rust";
-        let mut sut = MySQLTaskRepository::new(url).unwrap();
+        let config = app_config::load_config();
+        let mut sut = MySQLTaskRepository::new(&config.db_url,).unwrap();
 
         let id = Uuid::new_v4();
         let title = "Test Task".to_string();
