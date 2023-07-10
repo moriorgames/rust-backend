@@ -1,26 +1,30 @@
-use std::any::TypeId;
+use crate::bounded_context::infrastructure::config::app_config::AppConfig;
 use std::any::Any;
+use std::any::TypeId;
 use std::collections::HashMap;
 
 pub struct ServiceContainer {
-    pub defined: bool,
     services: HashMap<TypeId, Box<dyn Any>>,
+}
+
+pub trait Registrable {
+    fn new_with_config(config: AppConfig) -> Self;
 }
 
 impl ServiceContainer {
     pub fn new() -> Self {
         ServiceContainer {
-            defined: true,
             services: HashMap::new(),
-        }        
+        }
     }
 
-    pub fn register<T>(&mut self)
+    pub fn register<T>(&mut self, app_config: AppConfig)
     where
-        T: 'static + Default,
+        T: 'static + Registrable,
     {
-        self.services.insert(TypeId::of::<T>(), Box::new(T::default()));
-    }    
+        let service = T::new_with_config(app_config);
+        self.services.insert(TypeId::of::<T>(), Box::new(service));
+    }
 
     pub fn is_registered<T>(&self) -> bool
     where
@@ -33,32 +37,28 @@ impl ServiceContainer {
     where
         T: 'static,
     {
-        self.services.get(&TypeId::of::<T>()).and_then(|boxed| boxed.downcast_ref())
+        self.services
+            .get(&TypeId::of::<T>())
+            .and_then(|boxed| boxed.downcast_ref())
     }
-
 }
 
 #[cfg(test)]
 mod tests {
-    use super::ServiceContainer;
+    use super::*;
+    use crate::bounded_context::infrastructure::config::app_config::AppConfig;
 
     fn setup() -> ServiceContainer {
         ServiceContainer::new()
     }
 
     #[test]
-    fn test_service_container_created() {
-        let sut = setup();
-        assert!(sut.defined);
-    }
-
-    #[test]
     fn test_service_container_has_method_to_register_services() {
         let mut sut = setup();
-        assert!(sut.defined);
+        let config = AppConfig::default();
 
         // Register a service
-        sut.register::<MyService>();
+        sut.register::<MyService>(config);
 
         // Verify that the service is registered
         assert!(sut.is_registered::<MyService>());
@@ -75,18 +75,23 @@ mod tests {
     #[test]
     fn test_service_container_get_registered_service() {
         let mut sut = setup();
-        sut.register::<MyService>();
-    
+        let config = AppConfig::default();
+
+        sut.register::<MyService>(config);
+
         let service: Option<&MyService> = sut.get();
-    
+
         assert!(service.is_some());
     }
-    
-    struct MyService {}
 
-    impl Default for MyService {
-        fn default() -> Self {
-            MyService {}
+    #[allow(dead_code)]
+    struct MyService {
+        config: AppConfig,
+    }
+
+    impl Registrable for MyService {
+        fn new_with_config(config: AppConfig) -> Self {
+            MyService { config }
         }
     }
 }
