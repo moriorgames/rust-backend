@@ -6,6 +6,8 @@ $ cargo run --bin process
 $ cargo run --bin server
 # Test the project
 $ cargo test
+# Run specific integration test
+$ cargo test test_index_get
 ```
 
 # Mysql
