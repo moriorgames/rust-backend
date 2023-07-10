@@ -28,30 +28,60 @@ impl ServiceContainer {
     {
         self.services.contains_key(&TypeId::of::<T>())
     }
+
+    pub fn get<T>(&self) -> Option<&T>
+    where
+        T: 'static,
+    {
+        self.services.get(&TypeId::of::<T>()).and_then(|boxed| boxed.downcast_ref())
+    }
+
 }
 
 #[cfg(test)]
-mod tests {        
+mod tests {
     use super::ServiceContainer;
+
+    fn setup() -> ServiceContainer {
+        ServiceContainer::new()
+    }
 
     #[test]
     fn test_service_container_created() {
-        let container = ServiceContainer::new();
-        assert!(container.defined);
+        let sut = setup();
+        assert!(sut.defined);
     }
 
     #[test]
     fn test_service_container_has_method_to_register_services() {
-        let mut container = ServiceContainer::new();
-        assert!(container.defined);
+        let mut sut = setup();
+        assert!(sut.defined);
 
         // Register a service
-        container.register::<MyService>();
+        sut.register::<MyService>();
 
         // Verify that the service is registered
-        assert!(container.is_registered::<MyService>());
+        assert!(sut.is_registered::<MyService>());
     }
 
+    #[test]
+    fn test_service_container_get_service() {
+        let sut = setup();
+        let service: Option<&MyService> = sut.get();
+
+        assert!(service.is_none());
+    }
+
+    #[test]
+    fn test_service_container_get_registered_service() {
+        let mut sut = setup();
+        sut.register::<MyService>();
+    
+        let service: Option<&MyService> = sut.get();
+    
+        assert!(service.is_some());
+    }
+    
     struct MyService {}
 
     impl Default for MyService {
