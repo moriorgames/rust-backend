@@ -44,6 +44,7 @@ mod tests {
     use std::cell::RefCell;
     use uuid::uuid;
 
+    const DEF_ID: Uuid = uuid!("00000000-0000-0000-0000-000000000001");
     const DEF_TITLE: &str = "Sample Task";
     const DEF_DESCRIPTION: &str = "This is a sample task";
 
@@ -56,7 +57,7 @@ mod tests {
             self.saved_task.borrow_mut().replace(task);
         }
         fn get_by_id(&mut self, _id: Uuid) -> Result<Task, Box<dyn std::error::Error>> {
-            let id = uuid!("00000000-0000-0000-0000-000000000001");
+            let id = DEF_ID;
             let title = DEF_TITLE.to_string();
             let description = DEF_DESCRIPTION.to_string();
             let task = Task::new(id, title, description);

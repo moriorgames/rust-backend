@@ -46,3 +46,12 @@ $ curl -X POST -H "Content-Type: application/json" -d '{"title": "Amazing task",
 # Response
 {"id":"26ce4b34-b493-4ffc-a247-333c399371da","title":"Amazing task","description":"Description of an amazing task todo","status":"Fake status"}%
 ```
+
+# Next possible steps
+
+``` 
+- adding more functionality to your application, such as the ability to complete a task
+- assign a task to a user
+- handle errors in a more robust way
+- think about adding a security layer to protect your endpoints
+```
