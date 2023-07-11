@@ -1,6 +1,7 @@
 #[cfg(test)]
 mod tests {
     use backend::bounded_context::infrastructure::http::{configure_routes, create_task_controller::CreateTaskResponse};
+    use backend::bounded_context::domain::task_status::TaskStatus;
     use actix_web::{test, App};
     use actix_web::http::{header::ContentType, StatusCode};
     use serde_json::{json, from_str};
@@ -19,7 +20,7 @@ mod tests {
         });
 
         let req = test::TestRequest::post()
-            .uri("/api/tasks")
+            .uri("/api/task")
             .append_header(ContentType::json())
             .set_payload(payload.to_string())
             .to_request();
@@ -37,7 +38,7 @@ mod tests {
 
         assert_eq!(response.title, DEF_TITLE);
         assert_eq!(response.description, DEF_DESCRIPTION);
-        assert_eq!(response.status, "Fake status");
+        assert_eq!(response.status, TaskStatus::Todo.to_string());
         assert!(!response.id.is_empty());
     }    
 }
