@@ -27,7 +27,9 @@ $ cargo install cargo-tarpaulin
 $ cargo tarpaulin --output-dir target/debug/tarpaulin/ --out html
 $ open -a "Google Chrome" ./target/debug/tarpaulin/tarpaulin-report.html
 # Testing a single file
-$ cargo test --package hello_cargo --bin hello_cargo -- bounded_context::application::finish_task::tests --nocapture
+$ cargo test --package backend -- bounded_context::application::finish_task::tests --nocapture
+# Testing a single integration test
+$ cargo test --package backend --test finish_task_controller_test -- tests --nocapture
 ```
 
 # Tools
@@ -49,8 +51,15 @@ $ curl -X POST -H "Content-Type: application/json" -d '{"title": "Amazing task",
 # Start Task
 $ curl -X PUT -H "Content-Type: application/json" -d '{"id": "00000000-0000-0000-0000-000000000001"}' http://localhost:8080/api/start_task/00000000-0000-0000-0000-000000000001
 # Response
-{"id":"00000000-0000-0000-0000-000000000001","title":"Amazing task","description":"Description of an amazing task todo","status":"InProgress"}%
+{"id":"00000000-0000-0000-0000-000000000001","title":"Amazing task","description":"Description of an amazing task todo","status":"InProgress"}
+#
+# Finish Task
+$ curl -X PUT -H "Content-Type: application/json" -d '{"id": "f2894443-ed1d-4010-9238-28075d077c1d"}' http://localhost:8080/api/finish_task/f2894443-ed1d-4010-9238-28075d077c1d
+# Response
+{"id":"00000000-0000-0000-0000-000000000001","title":"Amazing task","description":"Description of an amazing task todo","status":"Done"}
 ```
+
+
 
 # Next possible steps
 

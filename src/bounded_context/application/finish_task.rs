@@ -12,12 +12,12 @@ pub struct FinishTaskOutput {
     pub status: String,
 }
 
-pub struct FinishTask<'a> {
-    task_repository: &'a mut dyn TaskRepository,
+pub struct FinishTask {
+    task_repository: Box<dyn TaskRepository>,
 }
 
-impl<'a> FinishTask<'a> {
-    pub fn new(task_repository: &'a mut dyn TaskRepository) -> Self {
+impl FinishTask {
+    pub fn new(task_repository: Box<dyn TaskRepository>) -> Self {
         FinishTask { task_repository }
     }
 
@@ -80,24 +80,18 @@ mod tests {
 
     #[test]
     fn test_finish_task_execute() {
-        let mut mock_repository = MockTaskRepository {
+        let mock_repository = MockTaskRepository {
             selected_task: RefCell::new(None),
             saved_task: RefCell::new(None),
         };
-        let mut sut = FinishTask::new(&mut mock_repository);
+        let mut sut = FinishTask::new(Box::new(mock_repository));
 
         let input = FinishTaskInput {
             id: DEF_ID.to_string(),
         };
         let output = sut.execute(input);
 
-        let selected_task = mock_repository.selected_task.borrow();
-        assert!(selected_task.is_some());
-
-        let saved_task = mock_repository.saved_task.borrow();
-        assert!(saved_task.is_some());
-        let saved_task = saved_task.as_ref().unwrap();
-        assert_eq!(output.id, saved_task.id.to_string());
+        assert_eq!(output.id, DEF_ID.to_string());
         assert_eq!(output.title, DEF_TITLE.to_string());
         assert_eq!(output.description, DEF_DESCRIPTION.to_string());
         assert_eq!(output.status, TaskStatus::Done.to_string());
