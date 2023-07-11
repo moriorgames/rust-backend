@@ -268,6 +268,7 @@ dependencies = [
  "mysql",
  "rand",
  "serde",
+ "serde_json",
  "uuid",
 ]
 

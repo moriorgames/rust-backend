@@ -10,7 +10,7 @@ pub struct CreateTaskRequest {
     pub description: String,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CreateTaskResponse {
     pub id: String,
     pub title: String,
