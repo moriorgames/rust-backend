@@ -24,7 +24,7 @@ async fn start_task(request: web::Json<StartTaskRequest>) -> impl Responder {
     let input = StartTaskInput {
         id: request.id.to_string(),
     };
-    let output = start_task.execute(input);
+    let output = start_task.execute(input).unwrap();
     
     let response = StartTaskResponse {
         id: output.id.clone(),
