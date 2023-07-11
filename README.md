@@ -41,10 +41,15 @@ $ find . -type f -exec printf '### START OF FILE ###\n%s\n' {} \; -exec cat {} \
 # Sample Request/Response
 
 ```
-# Request
-$ curl -X POST -H "Content-Type: application/json" -d '{"title": "Amazing task","description": "Description of an amazing task todo"}' http://localhost:8080/api/tasks
+# Create Task
+$ curl -X POST -H "Content-Type: application/json" -d '{"title": "Amazing task","description": "Description of an amazing task todo"}' http://localhost:8080/api/task
 # Response
-{"id":"26ce4b34-b493-4ffc-a247-333c399371da","title":"Amazing task","description":"Description of an amazing task todo","status":"Fake status"}%
+{"id":"00000000-0000-0000-0000-000000000001","title":"Amazing task","description":"Description of an amazing task todo","status":"Todo"}
+#
+# Start Task
+$ curl -X PUT -H "Content-Type: application/json" -d '{"id": "00000000-0000-0000-0000-000000000001"}' http://localhost:8080/api/task/00000000-0000-0000-0000-000000000001
+# Response
+{"id":"00000000-0000-0000-0000-000000000001","title":"Amazing task","description":"Description of an amazing task todo","status":"InProgress"}%
 ```
 
 # Next possible steps

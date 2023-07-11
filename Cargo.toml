@@ -5,16 +5,6 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[[bin]]
-name = "process"
-test = true
-path = "src/main.rs"
-
-[[bin]]
-name = "server"
-test = true
-path = "src/main_server.rs"
-
 [dependencies]
 rand = "^0.8"
 mysql = "^24.0"
