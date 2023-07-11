@@ -24,7 +24,7 @@ async fn finish_task(request: web::Json<FinishTaskRequest>) -> impl Responder {
     let input = FinishTaskInput {
         id: request.id.to_string(),
     };
-    let output = finish_task.execute(input);
+    let output = finish_task.execute(input).unwrap();
     
     let response = FinishTaskResponse {
         id: output.id.clone(),

@@ -54,7 +54,7 @@ $ curl -X PUT -H "Content-Type: application/json" -d '{"id": "00000000-0000-0000
 {"id":"00000000-0000-0000-0000-000000000001","title":"Amazing task","description":"Description of an amazing task todo","status":"InProgress"}
 #
 # Finish Task
-$ curl -X PUT -H "Content-Type: application/json" -d '{"id": "f2894443-ed1d-4010-9238-28075d077c1d"}' http://localhost:8080/api/finish_task/f2894443-ed1d-4010-9238-28075d077c1d
+$ curl -X PUT -H "Content-Type: application/json" -d '{"id": "00000000-0000-0000-0000-000000000001"}' http://localhost:8080/api/finish_task/00000000-0000-0000-0000-000000000001
 # Response
 {"id":"00000000-0000-0000-0000-000000000001","title":"Amazing task","description":"Description of an amazing task todo","status":"Done"}
 ```
