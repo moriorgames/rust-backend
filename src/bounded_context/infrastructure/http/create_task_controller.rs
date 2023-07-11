@@ -19,7 +19,7 @@ pub struct CreateTaskResponse {
 
 #[post("/task")]
 async fn create_task(request: web::Json<CreateTaskRequest>) -> impl Responder {
-
+    println!("Create Task");
     let mut create_task = CreateTaskBuilder::build();
 
     let input = CreateTaskInput {

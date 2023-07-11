@@ -16,9 +16,9 @@ pub struct StartTaskResponse {
     pub status: String,
 }
 
-#[put("/task/{id}")]
+#[put("/start_task/{id}")]
 async fn start_task(request: web::Json<StartTaskRequest>) -> impl Responder {
-    
+    println!("Start Task");
     let mut start_task = StartTaskBuilder::build();
 
     let input = StartTaskInput {

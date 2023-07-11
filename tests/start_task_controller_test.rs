@@ -36,7 +36,7 @@ mod tests {
             "id": response.id.clone(),
         });
         let req = test::TestRequest::put()
-            .uri("/api/task/{id}")
+            .uri("/api/start_task/{id}")
             .append_header(ContentType::json())
             .set_payload(payload.to_string())
             .to_request();
