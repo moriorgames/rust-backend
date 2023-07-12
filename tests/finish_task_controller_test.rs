@@ -1,21 +1,22 @@
 #[cfg(test)]
 mod tests {
-    use backend::bounded_context::infrastructure::http::{configure_routes, create_task_controller::CreateTaskResponse};
-    use backend::bounded_context::domain::task_status::TaskStatus;
-    use actix_web::{test, App};
     use actix_web::http::{header::ContentType, StatusCode};
-    use serde_json::{json, from_str};
+    use actix_web::{test, App};
+    use backend::bounded_context::domain::task_status::TaskStatus;
+    use backend::bounded_context::infrastructure::http::{
+        configure_routes, create_task_controller::CreateTaskResponse,
+    };
+    use serde_json::{from_str, json};
 
     const DEF_TITLE: &str = "Test Finish Task";
     const DEF_DESCRIPTION: &str = "Test Finish task description";
 
     #[actix_web::test]
     async fn test_finish_task_controller() {
-        
         let app_entry = App::new().configure(configure_routes::configure_routes);
         let app = test::init_service(app_entry).await;
-        
-        // ----------- Create Task ----------- 
+
+        // ----------- Create Task -----------
         let payload = json!({
             "title": DEF_TITLE,
             "description": DEF_DESCRIPTION
@@ -30,7 +31,7 @@ mod tests {
         let bytes = actix_web::body::to_bytes(body).await.unwrap();
         let body_str = std::str::from_utf8(&bytes).unwrap();
         let response: CreateTaskResponse = from_str(body_str).unwrap();
-        // ----------- Create Task ----------- 
+        // ----------- Create Task -----------
 
         let payload = json!({
             "id": response.id.clone(),
@@ -54,5 +55,5 @@ mod tests {
         assert_eq!(response.description, DEF_DESCRIPTION);
         assert_eq!(response.status, TaskStatus::Done.to_string());
         assert!(!response.id.is_empty());
-    }    
+    }
 }

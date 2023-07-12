@@ -1,6 +1,6 @@
 use crate::bounded_context::domain::{task::Task, task_repository::TaskRepository};
 use std::cell::RefCell;
-use uuid::{Uuid, uuid};
+use uuid::{uuid, Uuid};
 
 pub const DEF_ID: Uuid = uuid!("00000000-0000-0000-0000-000000000001");
 pub const DEF_TITLE: &str = "Sample Task";

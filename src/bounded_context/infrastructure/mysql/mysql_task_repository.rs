@@ -69,7 +69,7 @@ mod tests {
     #[test]
     fn test_save_and_retrieve_data() {
         let config = app_config::load_config();
-        let mut sut = MySQLTaskRepository::new(&config.db_url,).unwrap();
+        let mut sut = MySQLTaskRepository::new(&config.db_url).unwrap();
 
         let id = Uuid::new_v4();
         let title = "Test Task".to_string();

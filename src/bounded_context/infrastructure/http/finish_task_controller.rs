@@ -1,7 +1,7 @@
+use crate::bounded_context::application::finish_task::FinishTaskInput;
+use crate::bounded_context::builders::finish_task_builder::FinishTaskBuilder;
 use actix_web::{put, web, HttpResponse, Responder};
 use serde::{Deserialize, Serialize};
-use crate::bounded_context::builders::finish_task_builder::FinishTaskBuilder;
-use crate::bounded_context::application::finish_task::FinishTaskInput;
 
 #[derive(Debug, Deserialize)]
 pub struct FinishTaskRequest {
@@ -25,7 +25,7 @@ async fn finish_task(request: web::Json<FinishTaskRequest>) -> impl Responder {
         id: request.id.to_string(),
     };
     let output = finish_task.execute(input).unwrap();
-    
+
     let response = FinishTaskResponse {
         id: output.id.clone(),
         title: output.title.clone(),

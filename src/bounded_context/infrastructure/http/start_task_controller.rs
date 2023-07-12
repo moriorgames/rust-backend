@@ -1,7 +1,7 @@
+use crate::bounded_context::application::start_task::StartTaskInput;
+use crate::bounded_context::builders::start_task_builder::StartTaskBuilder;
 use actix_web::{put, web, HttpResponse, Responder};
 use serde::{Deserialize, Serialize};
-use crate::bounded_context::builders::start_task_builder::StartTaskBuilder;
-use crate::bounded_context::application::start_task::StartTaskInput;
 
 #[derive(Debug, Deserialize)]
 pub struct StartTaskRequest {
@@ -25,7 +25,7 @@ async fn start_task(request: web::Json<StartTaskRequest>) -> impl Responder {
         id: request.id.to_string(),
     };
     let output = start_task.execute(input).unwrap();
-    
+
     let response = StartTaskResponse {
         id: output.id.clone(),
         title: output.title.clone(),

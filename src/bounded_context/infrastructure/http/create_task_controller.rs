@@ -1,7 +1,7 @@
+use crate::bounded_context::application::create_task::CreateTaskInput;
+use crate::bounded_context::builders::create_task_builder::CreateTaskBuilder;
 use actix_web::{post, web, HttpResponse, Responder};
 use serde::{Deserialize, Serialize};
-use crate::bounded_context::builders::create_task_builder::CreateTaskBuilder;
-use crate::bounded_context::application::create_task::CreateTaskInput;
 
 #[derive(Debug, Deserialize)]
 pub struct CreateTaskRequest {

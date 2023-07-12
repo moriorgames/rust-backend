@@ -1,10 +1,12 @@
 #[cfg(test)]
 mod tests {
-    use backend::bounded_context::infrastructure::http::{configure_routes, create_task_controller::CreateTaskResponse};
-    use backend::bounded_context::domain::task_status::TaskStatus;
-    use actix_web::{test, App};
     use actix_web::http::{header::ContentType, StatusCode};
-    use serde_json::{json, from_str};
+    use actix_web::{test, App};
+    use backend::bounded_context::domain::task_status::TaskStatus;
+    use backend::bounded_context::infrastructure::http::{
+        configure_routes, create_task_controller::CreateTaskResponse,
+    };
+    use serde_json::{from_str, json};
 
     const DEF_TITLE: &str = "Test Task";
     const DEF_DESCRIPTION: &str = "Test description";
@@ -40,5 +42,5 @@ mod tests {
         assert_eq!(response.description, DEF_DESCRIPTION);
         assert_eq!(response.status, TaskStatus::Todo.to_string());
         assert!(!response.id.is_empty());
-    }    
+    }
 }
