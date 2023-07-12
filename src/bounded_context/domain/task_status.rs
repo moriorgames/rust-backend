@@ -46,7 +46,10 @@ mod tests {
     #[test]
     fn test_from_string() {
         assert_eq!(TaskStatus::from_string(TODO_VALUE), Some(TaskStatus::Todo));
-        assert_eq!(TaskStatus::from_string(IN_PROGRESS_VALUE), Some(TaskStatus::InProgress));
+        assert_eq!(
+            TaskStatus::from_string(IN_PROGRESS_VALUE),
+            Some(TaskStatus::InProgress)
+        );
         assert_eq!(TaskStatus::from_string(DONE_VALUE), Some(TaskStatus::Done));
         assert_eq!(TaskStatus::from_string("InvalidStatus"), None);
     }

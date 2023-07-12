@@ -41,12 +41,8 @@ impl CreateTask {
 mod tests {
     use super::*;
     use crate::bounded_context::domain::task_status::TaskStatus;
+    use crate::bounded_context::mocks::mock_task_repository::{DEF_DESCRIPTION, DEF_ID, DEF_TITLE};
     use std::cell::RefCell;
-    use uuid::uuid;
-
-    const DEF_ID: Uuid = uuid!("00000000-0000-0000-0000-000000000001");
-    const DEF_TITLE: &str = "Sample Task";
-    const DEF_DESCRIPTION: &str = "This is a sample task";
 
     struct MockTaskRepository {
         saved_task: RefCell<Option<Task>>,

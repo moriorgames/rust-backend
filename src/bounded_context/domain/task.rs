@@ -37,11 +37,7 @@ impl Task {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use uuid::{uuid, Uuid};
-
-    const DEF_ID: Uuid = uuid!("00000000-0000-0000-0000-000000000001");
-    const DEF_TITLE: &str = "Sample Task";
-    const DEF_DESCRIPTION: &str = "This is a sample task";
+    use crate::bounded_context::mocks::mock_task_repository::{DEF_DESCRIPTION, DEF_ID, DEF_TITLE};
 
     fn create_task_with_defaults() -> Task {
         Task::new(DEF_ID, DEF_TITLE.to_string(), DEF_DESCRIPTION.to_string())
