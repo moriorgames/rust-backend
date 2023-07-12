@@ -27,10 +27,12 @@ impl Task {
 
     pub fn start_task(&mut self) {
         self.status = TaskStatus::InProgress;
+        self.updated_at = Utc::now();
     }
 
     pub fn finish_task(&mut self) {
         self.status = TaskStatus::Done;
+        self.updated_at = Utc::now();
     }
 }
 
@@ -38,6 +40,8 @@ impl Task {
 mod tests {
     use super::*;
     use crate::bounded_context::mocks::mock_task_repository::{DEF_DESCRIPTION, DEF_ID, DEF_TITLE};
+    use std::thread;
+    use std::time::Duration;
 
     fn create_task_with_defaults() -> Task {
         Task::new(DEF_ID, DEF_TITLE.to_string(), DEF_DESCRIPTION.to_string())
@@ -76,5 +80,29 @@ mod tests {
         sut.finish_task();
 
         assert_eq!(sut.status, expected_status_after);
+    }
+
+    #[test]
+    fn test_start_task_updates_updated_at() {
+        let mut sut = create_task_with_defaults();
+        let initial_updated_at = sut.updated_at;
+
+        thread::sleep(Duration::from_millis(100));
+
+        sut.start_task();
+
+        assert!(sut.updated_at > initial_updated_at, "Expected updated_at to be updated when starting task");
+    }
+
+    #[test]
+    fn test_finish_task_updates_updated_at() {
+        let mut sut = create_task_with_defaults();
+        let initial_updated_at = sut.updated_at;
+
+        thread::sleep(Duration::from_millis(100));
+
+        sut.finish_task();
+
+        assert!(sut.updated_at > initial_updated_at, "Expected updated_at to be updated when finishing task");
     }
 }
