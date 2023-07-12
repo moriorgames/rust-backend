@@ -2,12 +2,9 @@
 
 ```
 # Run the project
-$ cargo run --bin process
-$ cargo run --bin server
+$ cargo run
 # Test the project
 $ cargo test
-# Run specific integration test
-$ cargo test test_index_get
 ```
 
 # Mysql
@@ -18,7 +15,7 @@ $ docker exec -it db mysql -uroot -proot rust
 $ docker exec -i db mysql -uroot -proot < src/bounded_context/infrastructure/mysql/task.sql
 ```
 
-# Code coverage
+# Testing and Code coverage
 
 To be able to execute the code coverage you can use this tool
 

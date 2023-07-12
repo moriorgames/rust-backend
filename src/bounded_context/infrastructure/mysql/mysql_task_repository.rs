@@ -40,11 +40,12 @@ impl TaskRepository for MySQLTaskRepository {
         let id_value = id.to_string();
         let modified_query = query.replace("?", &format!("'{}'", id_value));
 
-        let selected_rows = self
-            .conn
-            .query_map(modified_query, |(id, title, description, status)| {
-                TaskRow::new(id, title, description, status)
-            })?;
+        let selected_rows = self.conn.query_map(
+            modified_query,
+            |(id, title, description, status, created_at, updated_at)| {
+                TaskRow::new(id, title, description, status, created_at, updated_at)
+            },
+        )?;
 
         let task_mapper = MysqlTaskMapper {};
 
@@ -76,11 +77,15 @@ mod tests {
         let title = "Test Task".to_string();
         let description = "This is a test task".to_string();
         let status = TaskStatus::Todo.to_string();
+        let created_at = "2023-05-05 12:15:00".to_string();
+        let updated_at = "2023-05-05 12:15:00".to_string();
         let task = task_from_persistence::create(
             id.to_string(),
             title.clone(),
             description.clone(),
             status,
+            created_at,
+            updated_at,
         )
         .unwrap();
 

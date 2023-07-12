@@ -1,4 +1,5 @@
 use super::task_status::TaskStatus;
+use chrono::{DateTime, Utc};
 use uuid::Uuid;
 
 #[derive(Clone)]
@@ -7,15 +8,20 @@ pub struct Task {
     pub title: String,
     pub description: String,
     pub status: TaskStatus,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
 }
 
 impl Task {
     pub fn new(id: Uuid, title: String, description: String) -> Task {
+        let now = Utc::now();
         Task {
             id,
             title,
             description,
             status: TaskStatus::Todo,
+            created_at: now,
+            updated_at: now,
         }
     }
 

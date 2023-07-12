@@ -7,15 +7,26 @@ pub struct TaskRow {
     title: String,
     description: String,
     status: String,
+    created_at: String,
+    updated_at: String,
 }
 
 impl TaskRow {
-    pub fn new(id: String, title: String, description: String, status: String) -> Self {
+    pub fn new(
+        id: String,
+        title: String,
+        description: String,
+        status: String,
+        created_at: String,
+        updated_at: String,
+    ) -> Self {
         Self {
             id,
             title,
             description,
             status,
+            created_at,
+            updated_at,
         }
     }
 }
@@ -29,6 +40,8 @@ impl MysqlTaskMapper {
             row.title.clone(),
             row.description.clone(),
             row.status,
+            row.created_at,
+            row.updated_at,
         ) {
             Ok(task) => Ok(task),
             Err(e) => Err(e),
