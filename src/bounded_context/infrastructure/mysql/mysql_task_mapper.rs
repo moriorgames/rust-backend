@@ -1,5 +1,5 @@
-use crate::bounded_context::domain::{task::Task, task_status::TaskStatus};
-use uuid::Uuid;
+use crate::bounded_context::domain::task::Task;
+use crate::bounded_context::infrastructure::mysql::task_from_persistence::task_from_persistence;
 
 #[derive(Debug)]
 pub struct TaskRow {
@@ -24,13 +24,14 @@ pub struct MysqlTaskMapper {}
 
 impl MysqlTaskMapper {
     pub fn map_to_task(&self, row: TaskRow) -> Result<Task, Box<dyn std::error::Error>> {
-        let status = TaskStatus::from_string(&row.status);
-        let task = Task::from_persistence(
-            Uuid::parse_str(&row.id)?,
+        match task_from_persistence::create(
+            row.id,
             row.title.clone(),
             row.description.clone(),
-            status,
-        );
-        Ok(task)
+            row.status,
+        ) {
+            Ok(task) => Ok(task),
+            Err(e) => Err(e),
+        }
     }
 }

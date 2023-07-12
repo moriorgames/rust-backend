@@ -64,6 +64,7 @@ mod tests {
     use super::*;
     use crate::bounded_context::domain::task_status::TaskStatus;
     use crate::bounded_context::infrastructure::config::app_config;
+    use crate::bounded_context::infrastructure::mysql::task_from_persistence::task_from_persistence;
     use uuid::Uuid;
 
     #[test]
@@ -74,8 +75,14 @@ mod tests {
         let id = Uuid::new_v4();
         let title = "Test Task".to_string();
         let description = "This is a test task".to_string();
-        let status = TaskStatus::Todo;
-        let task = Task::from_persistence(id, title.clone(), description.clone(), status);
+        let status = TaskStatus::Todo.to_string();
+        let task = task_from_persistence::create(
+            id.to_string(),
+            title.clone(),
+            description.clone(),
+            status,
+        )
+        .unwrap();
 
         sut.save(task.clone());
 

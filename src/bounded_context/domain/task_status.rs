@@ -1,5 +1,9 @@
 use std::fmt;
 
+const TODO_VALUE: &str = "Todo";
+const IN_PROGRESS_VALUE: &str = "InProgress";
+const DONE_VALUE: &str = "Done";
+
 #[derive(Debug, PartialEq, Clone)]
 pub enum TaskStatus {
     Todo,
@@ -18,12 +22,12 @@ impl fmt::Display for TaskStatus {
 }
 
 impl TaskStatus {
-    pub fn from_string(value: &str) -> TaskStatus {
+    pub fn from_string(value: &str) -> Option<TaskStatus> {
         match value {
-            "Todo" => TaskStatus::Todo,
-            "InProgress" => TaskStatus::InProgress,
-            "Done" => TaskStatus::Done,
-            &_ => todo!(),
+            TODO_VALUE => Some(TaskStatus::Todo),
+            IN_PROGRESS_VALUE => Some(TaskStatus::InProgress),
+            DONE_VALUE => Some(TaskStatus::Done),
+            &_ => None,
         }
     }
 }
