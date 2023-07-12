@@ -69,14 +69,20 @@ $ find . -type f -exec printf '### START OF FILE ###\n%s\n' {} \; -exec cat {} \
 Here are some example API requests and responses:
 
 ```
-# Create Task
+# Create Task Request
 $ curl -X POST -H "Content-Type: application/json" -d '{"title": "Amazing task","description": "Description of an amazing task todo"}' http://localhost:8080/api/task
+# Create Task Response
+$ {"id":"00000000-0000-0000-0000-000000000001","title":"Amazing task","description":"Description of an amazing task todo","status":"Todo"}
 
-# Start Task
+# Start Task Request
 $ curl -X PUT -H "Content-Type: application/json" -d '{"id": "00000000-0000-0000-0000-000000000001"}' http://localhost:8080/api/start_task/00000000-0000-0000-0000-000000000001
+# Start Task Response
+$ {"id":"00000000-0000-0000-0000-000000000001","title":"Amazing task","description":"Description of an amazing task todo","status":"InProgress"}
 
-# Finish Task
+# Finish Task Request
 $ curl -X PUT -H "Content-Type: application/json" -d '{"id": "00000000-0000-0000-0000-000000000001"}' http://localhost:8080/api/finish_task/00000000-0000-0000-0000-000000000001
+# Finish Task Response
+$ {"id":"00000000-0000-0000-0000-000000000001","title":"Amazing task","description":"Description of an amazing task todo","status":"Done"}
 ```
 
 ## Future Improvements
