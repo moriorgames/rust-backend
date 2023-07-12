@@ -1,5 +1,5 @@
 use crate::bounded_context::application::create_task::CreateTaskInput;
-use crate::bounded_context::builders::create_task_builder::CreateTaskBuilder;
+use crate::bounded_context::builders::create_task_builder::create_task_builder;
 use crate::bounded_context::infrastructure::http::task_response::TaskResponse;
 use actix_web::{post, web, HttpResponse, Responder};
 use serde::Deserialize;
@@ -13,7 +13,7 @@ pub struct CreateTaskRequest {
 #[post("/task")]
 async fn create_task(request: web::Json<CreateTaskRequest>) -> impl Responder {
     println!("Create Task");
-    let mut create_task = CreateTaskBuilder::build();
+    let mut create_task = create_task_builder::build();
 
     let input = CreateTaskInput {
         title: request.title.clone(),
