@@ -4,7 +4,7 @@ mod tests {
     use actix_web::{test, App};
     use backend::bounded_context::domain::task_status::TaskStatus;
     use backend::bounded_context::infrastructure::http::{
-        configure_routes, create_task_controller::CreateTaskResponse,
+        configure_routes, task_response::TaskResponse,
     };
     use serde_json::{from_str, json};
 
@@ -36,7 +36,7 @@ mod tests {
         let bytes = actix_web::body::to_bytes(body).await.unwrap();
         let body_str = std::str::from_utf8(&bytes).unwrap();
 
-        let response: CreateTaskResponse = from_str(body_str).unwrap();
+        let response: TaskResponse = from_str(body_str).unwrap();
 
         assert_eq!(response.title, DEF_TITLE);
         assert_eq!(response.description, DEF_DESCRIPTION);

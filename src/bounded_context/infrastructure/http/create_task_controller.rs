@@ -1,20 +1,13 @@
 use crate::bounded_context::application::create_task::CreateTaskInput;
 use crate::bounded_context::builders::create_task_builder::CreateTaskBuilder;
+use crate::bounded_context::infrastructure::http::task_response::TaskResponse;
 use actix_web::{post, web, HttpResponse, Responder};
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 pub struct CreateTaskRequest {
     pub title: String,
     pub description: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct CreateTaskResponse {
-    pub id: String,
-    pub title: String,
-    pub description: String,
-    pub status: String,
 }
 
 #[post("/task")]
@@ -28,7 +21,7 @@ async fn create_task(request: web::Json<CreateTaskRequest>) -> impl Responder {
     };
     let output = create_task.execute(input);
 
-    let response = CreateTaskResponse {
+    let response = TaskResponse {
         id: output.id.clone(),
         title: output.title.clone(),
         description: output.description.clone(),
