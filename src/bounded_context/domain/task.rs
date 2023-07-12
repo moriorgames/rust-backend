@@ -91,7 +91,10 @@ mod tests {
 
         sut.start_task();
 
-        assert!(sut.updated_at > initial_updated_at, "Expected updated_at to be updated when starting task");
+        assert!(
+            sut.updated_at > initial_updated_at,
+            "Expected updated_at to be updated when starting task"
+        );
     }
 
     #[test]
@@ -103,6 +106,9 @@ mod tests {
 
         sut.finish_task();
 
-        assert!(sut.updated_at > initial_updated_at, "Expected updated_at to be updated when finishing task");
+        assert!(
+            sut.updated_at > initial_updated_at,
+            "Expected updated_at to be updated when finishing task"
+        );
     }
 }
