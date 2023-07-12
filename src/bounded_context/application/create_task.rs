@@ -41,30 +41,14 @@ impl CreateTask {
 mod tests {
     use super::*;
     use crate::bounded_context::domain::task_status::TaskStatus;
-    use crate::bounded_context::mocks::mock_task_repository::{DEF_DESCRIPTION, DEF_ID, DEF_TITLE};
+    use crate::bounded_context::mocks::mock_task_repository::MockTaskRepository;
+    use crate::bounded_context::mocks::mock_task_repository::{DEF_DESCRIPTION, DEF_TITLE};
     use std::cell::RefCell;
-
-    struct MockTaskRepository {
-        saved_task: RefCell<Option<Task>>,
-    }
-
-    impl TaskRepository for MockTaskRepository {
-        fn save(&mut self, task: Task) {
-            self.saved_task.borrow_mut().replace(task);
-        }
-        fn get_by_id(&mut self, _id: Uuid) -> Result<Task, Box<dyn std::error::Error>> {
-            let id = DEF_ID;
-            let title = DEF_TITLE.to_string();
-            let description = DEF_DESCRIPTION.to_string();
-            let task = Task::new(id, title, description);
-
-            return Ok(task);
-        }
-    }
 
     #[test]
     fn test_create_task_execute() {
         let mock_repository = MockTaskRepository {
+            selected_task: RefCell::new(None),
             saved_task: RefCell::new(None),
         };
         let mut sut = CreateTask::new(Box::new(mock_repository));
